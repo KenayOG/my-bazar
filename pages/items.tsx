@@ -23,6 +23,25 @@ const ProductList = () => {
   const [resultCount, setResultCount] = useState(0);
   const router = useRouter();
 
+  const fetchProducts = async (query: string) => {
+    try {
+      const res = await fetch(`/api/items?q=${query}`);
+      const data = await res.json();
+      setFilteredProducts(data);
+      setResultCount(data.length);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (search) {
+      fetchProducts(search);
+    } else {
+      fetchProducts("");
+    }
+  }, [search]);
+
   useEffect(() => {
     const querySearch = router.query.search;
 
@@ -52,16 +71,19 @@ const ProductList = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen mt-5">
       {/* Caja de búsqueda */}
-      <div className="mb-4">
-        <input
-          type="text"
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500"
-          placeholder="Buscar productos..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)} // Actualizar búsqueda
-        />
+      <div className="mb-5 mt-5">
+        <div className="flex">
+          <i className="fa-solid fa-bag-shopping text-blue-500 text-5xl mr-5"></i>
+          <input
+            type="text"
+            className="px-8 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500"
+            placeholder="Buscar productos..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)} // Actualizar búsqueda
+          />
+        </div>
       </div>
 
       {/* Título y cantidad de resultados */}
@@ -72,27 +94,30 @@ const ProductList = () => {
       </p>
 
       {/* Listado de productos filtrados */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 mt-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-7 m-5">
         {/* Verifica que filteredProducts sea un arreglo antes de mapear */}
         {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="p-4 border rounded-lg bg-white shadow-md relative"
+              className="p-4 border rounded-lg bg-gray-200 shadow-md relative"
             >
               <img
                 src={product.thumbnail}
                 alt={product.title}
-                className="w-full h-48 object-cover mb-4"
+                className="w-48 h-48 object-cover rounded-full  transform translate-x-1/4"
               />
-              <h2 className="text-xl font-semibold">{product.title}</h2>
+              <h2 className="text-xl font-semibold mt-2">{product.title}</h2>
               <p className="text-gray-600">{product.description}</p>
               <p className="text-lg font-bold">${product.price}</p>
               <p className="text-sm text-gray-500">
                 Categoría: {product.category}
               </p>
-              <div className="mt-2">
-                <span className="text-yellow-400">⭐ {product.rating}</span>
+              <br />
+              <br />
+              <br />
+              <div className="mt-2 absolute bottom-4 left-4">
+                <span className="text-black-400">⭐ {product.rating}</span>
               </div>
               <button
                 type="button"

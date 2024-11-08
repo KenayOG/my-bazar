@@ -44,7 +44,7 @@
       "stock": 36,
       "brand": "Samsung",
       "category": "smartphones",
-      "thumbnail": "https://i.dummyjson.com/data/products/3/thumbnail.jpg",
+      "thumbnail": "https://cdn.pixabay.com/photo/2022/03/12/09/23/smartphone-7063762_1280.jpg",
       "images": ["https://i.dummyjson.com/data/products/3/1.jpg"]
     },
     {
@@ -76,7 +76,7 @@
       "stock": 32,
       "brand": "Huawei",
       "category": "smartphones",
-      "thumbnail": "https://i.dummyjson.com/data/products/5/thumbnail.jpg",
+      "thumbnail": "https://cdn.pixabay.com/photo/2020/01/12/08/09/handphone-4759484_1280.jpg",
       "images": [
         "https://i.dummyjson.com/data/products/5/1.jpg",
         "https://i.dummyjson.com/data/products/5/2.jpg",
@@ -93,12 +93,11 @@
       "stock": 83,
       "brand": "Apple",
       "category": "laptops",
-      "thumbnail": "https://i.dummyjson.com/data/products/6/thumbnail.png",
+      "thumbnail": "https://cdn.pixabay.com/photo/2014/09/24/14/29/macbook-459196_1280.jpg",
       "images": [
-        "https://i.dummyjson.com/data/products/6/1.png",
-        "https://i.dummyjson.com/data/products/6/2.jpg",
-        "https://i.dummyjson.com/data/products/6/3.png",
-        "https://i.dummyjson.com/data/products/6/4.jpg"
+        "https://cdn.pixabay.com/photo/2014/09/24/14/29/macbook-459196_1280.jpg",
+        "https://cdn.pixabay.com/photo/2014/09/24/14/29/macbook-459196_1280.jpg",
+        "https://cdn.pixabay.com/photo/2014/09/24/14/29/macbook-459196_1280.jpg"
       ]
     },
     {
@@ -111,12 +110,11 @@
       "stock": 50,
       "brand": "Samsung",
       "category": "laptops",
-      "thumbnail": "https://i.dummyjson.com/data/products/7/thumbnail.jpg",
+      "thumbnail": "https://cdn.pixabay.com/photo/2017/06/14/17/41/galaxy-s8-2402805_1280.jpg",
       "images": [
-        "https://i.dummyjson.com/data/products/7/1.jpg",
-        "https://i.dummyjson.com/data/products/7/2.jpg",
-        "https://i.dummyjson.com/data/products/7/3.jpg",
-        "https://i.dummyjson.com/data/products/7/thumbnail.jpg"
+        "https://cdn.pixabay.com/photo/2017/06/14/17/41/galaxy-s8-2402805_1280.jpg",
+        "https://cdn.pixabay.com/photo/2017/06/14/17/41/galaxy-s8-2402805_1280.jpg",
+        "https://cdn.pixabay.com/photo/2017/06/14/17/41/galaxy-s8-2402805_1280.jpg"
       ]
     },
     {
@@ -129,13 +127,11 @@
       "stock": 68,
       "brand": "Microsoft Surface",
       "category": "laptops",
-      "thumbnail": "https://i.dummyjson.com/data/products/8/thumbnail.jpg",
+      "thumbnail": "https://cdn.pixabay.com/photo/2020/09/26/11/36/laptop-5603790_1280.jpg",
       "images": [
-        "https://i.dummyjson.com/data/products/8/1.jpg",
-        "https://i.dummyjson.com/data/products/8/2.jpg",
-        "https://i.dummyjson.com/data/products/8/3.jpg",
-        "https://i.dummyjson.com/data/products/8/4.jpg",
-        "https://i.dummyjson.com/data/products/8/thumbnail.jpg"
+        "https://cdn.pixabay.com/photo/2020/09/26/11/36/laptop-5603790_1280.jpg",
+        "https://cdn.pixabay.com/photo/2020/09/26/11/36/laptop-5603790_1280.jpg",
+        "https://cdn.pixabay.com/photo/2020/09/26/11/36/laptop-5603790_1280.jpg"
       ]
     },
     {
