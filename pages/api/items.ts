@@ -1,8 +1,6 @@
-// pages/api/items.ts
 import { NextApiRequest, NextApiResponse } from "next";
 import productsData from "../../data/products.json";
 
-// Tipo para un producto
 interface Product {
   id: number;
   title: string;

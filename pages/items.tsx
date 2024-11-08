@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-// Definimos la interfaz para el tipo de producto
 interface Product {
   id: number;
   title: string;
@@ -18,7 +17,7 @@ interface Product {
 
 const ResultsPage = () => {
   const router = useRouter();
-  const { search } = router.query; // Obtener el término de búsqueda de la URL
+  const { search } = router.query;
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -39,9 +38,8 @@ const ResultsPage = () => {
     };
 
     fetchResults();
-  }, [search]); // Ejecuta el efecto cuando cambia `search`
+  }, [search]);
 
-  // Función para redirigir al detalle del producto
   const handleViewDetail = (id: number) => {
     router.push(`/item/${id}`);
   };
@@ -80,9 +78,12 @@ const ResultsPage = () => {
     }
   };
 
+  const handleGoToSales = () => {
+    router.push("/sales");
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen mt-5">
-      {/* Caja de búsqueda */}
       <div className="mb-5 mt-5">
         <div className="flex">
           <i className="fa-solid fa-bag-shopping text-blue-500 text-5xl mr-5 mt-2"></i>
@@ -105,9 +106,14 @@ const ResultsPage = () => {
           >
             Ver todos
           </button>
+          <button
+            onClick={handleGoToSales}
+            className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none mb-5 ml-5 mt-5"
+          >
+            Ver Compras
+          </button>
         </div>
       </div>
-      {/* Título y cantidad de resultados */}
       <p className="font-bold text-center text-gray-700 mb-4">
         Resultados de la búsqueda de {search}: {searchResults.length}
       </p>
@@ -146,7 +152,7 @@ const ResultsPage = () => {
           ))}
         </div>
       ) : (
-        <p>No se encontraron productos para {search}</p>
+        <p>No se encontraron productos para mostrar</p>
       )}
     </div>
   );

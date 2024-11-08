@@ -1,4 +1,4 @@
-// pages/api/items/[id].ts
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -20,6 +20,7 @@ const ProductDetail = () => {
   const router = useRouter();
   const { id } = router.query;
   const [product, setProduct] = useState<Product | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     if (id) {
@@ -31,6 +32,23 @@ const ProductDetail = () => {
         );
     }
   }, [id]);
+
+  const fetchProductBySearchTerm = async () => {
+    try {
+      const response = await fetch(`/api/items?q=${searchTerm}`);
+      if (!response.ok) {
+        throw new Error("Error al obtener resultados de búsqueda");
+      }
+      const data = await response.json();
+      // Redirige a la página de resultados con el término de búsqueda en la URL
+      router.push({
+        pathname: "/items",
+        query: { search: searchTerm },
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const handleBuy = async () => {
     if (product) {
@@ -70,6 +88,22 @@ const ProductDetail = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex mt-5 mb-3">
+        <i className="fa-solid fa-bag-shopping text-blue-500 text-5xl mr-5 mt-2"></i>
+        <input
+          type="text"
+          value={searchTerm}
+          className="px-8 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500"
+          placeholder="Buscar productos..."
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <button
+          onClick={fetchProductBySearchTerm}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none mb-5 ml-5 mt-5"
+        >
+          Buscar producto
+        </button>
+      </div>
       <div className="max-w-3xl w-full p-6 bg-white rounded-lg shadow-md">
         <div className="text-right">
           <div className="mt-2">

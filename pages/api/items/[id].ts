@@ -1,4 +1,3 @@
-// pages/api/items/[id].ts
 import { NextApiRequest, NextApiResponse } from "next";
 import productsData from "../../../data/products.json";
 
