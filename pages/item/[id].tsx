@@ -34,8 +34,10 @@ const ProductDetail = () => {
           ))}
         </div>
         <div className="text-center">
-          <h2 className="text-3xl font-semibold mb-2">{product.title}</h2>
-          <p className="text-lg text-gray-600 mb-4">{product.description}</p>
+          <h2 className="text-3xl font-semibold mb-2 text-blue-700">
+            {product.title}
+          </h2>
+          <p className="text-md text-gray-600 mb-4">{product.description}</p>
           <p className="text-xl font-bold mb-4">Precio: ${product.price}</p>
           <p className="text-md text-gray-500">Marca: {product.brand}</p>
           <p className="text-md text-gray-500">Categoría: {product.category}</p>
