@@ -32,6 +32,38 @@ const ProductDetail = () => {
     }
   }, [id]);
 
+  const handleBuy = async () => {
+    if (product) {
+      const saleData = {
+        product_name: product.title,
+        price: product.price,
+        brand: product.brand,
+        category: product.category,
+        description: product.description,
+        sale_date: new Date().toISOString(),
+      };
+      try {
+        const response = await fetch("/api/addSale", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(saleData),
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          alert("Compra registrada con éxito");
+        } else {
+          alert("Hubo un error al registrar la compra");
+        }
+      } catch (error) {
+        console.error("Error al registrar la compra:", error);
+        alert("Error al registrar la compra");
+      }
+    }
+  };
+
   if (!product) {
     return <p>Cargando producto...</p>;
   }
@@ -68,6 +100,7 @@ const ProductDetail = () => {
           <div className="mt-2">
             <button
               type="button"
+              onClick={handleBuy}
               className="px-8 py-3 bg-green-700 text-white rounded-r-lg hover:bg-green-600 focus:outline-none"
             >
               Comprar
