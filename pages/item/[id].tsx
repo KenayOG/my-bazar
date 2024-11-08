@@ -1,22 +1,43 @@
-// pages/item/[id].tsx
+// pages/api/items/[id].ts
 import { useRouter } from "next/router";
-import productsData from "../../data/products.json";
+import { useEffect, useState } from "react";
+
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  discountPercentage: number;
+  rating: number;
+  stock: number;
+  brand: string;
+  category: string;
+  thumbnail: string;
+  images: string[];
+}
 
 const ProductDetail = () => {
   const router = useRouter();
-  const { id } = router.query; // Obtener el id del producto desde la URL
+  const { id } = router.query;
+  const [product, setProduct] = useState<Product | null>(null);
 
-  // Buscar el producto correspondiente usando el id
-  const product = productsData.products.find(
-    (product) => product.id === parseInt(id as string)
-  );
+  useEffect(() => {
+    if (id) {
+      fetch(`/api/items/${id}`)
+        .then((response) => response.json())
+        .then((data) => setProduct(data))
+        .catch((error) =>
+          console.error("Error al obtener el producto:", error)
+        );
+    }
+  }, [id]);
 
   if (!product) {
-    return <p>Producto no encontrado</p>;
+    return <p>Cargando producto...</p>;
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="max-w-3xl w-full p-6 bg-white rounded-lg shadow-md">
         <div className="text-right">
           <div className="mt-2">

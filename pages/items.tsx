@@ -1,8 +1,7 @@
-// pages/items.tsx
-import { useEffect, useState } from "react";
-import productsData from "../data/products.json";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
+// Definimos la interfaz para el tipo de producto
 interface Product {
   id: number;
   title: string;
@@ -17,57 +16,68 @@ interface Product {
   images: string[];
 }
 
-const ProductList = () => {
-  const [search, setSearch] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [resultCount, setResultCount] = useState(0);
+const ResultsPage = () => {
   const router = useRouter();
+  const { search } = router.query; // Obtener el término de búsqueda de la URL
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const fetchProducts = async (query: string) => {
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (search) {
+        try {
+          const response = await fetch(`/api/items?q=${search}`);
+          if (!response.ok) {
+            throw new Error("Error al obtener resultados de búsqueda");
+          }
+          const data: Product[] = await response.json();
+          setSearchResults(data);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+    };
+
+    fetchResults();
+  }, [search]); // Ejecuta el efecto cuando cambia `search`
+
+  // Función para redirigir al detalle del producto
+  const handleViewDetail = (id: number) => {
+    router.push(`/item/${id}`);
+  };
+
+  const fetchAllItems = async () => {
     try {
-      const res = await fetch(`/api/items?q=${query}`);
-      const data = await res.json();
-      setFilteredProducts(data);
-      setResultCount(data.length);
+      const response = await fetch(`/api/items`);
+      if (!response.ok) {
+        throw new Error("Error al obtener todos los productos");
+      }
+      const data: Product[] = await response.json();
+      setSearchResults(data);
+      router.push({
+        pathname: "/items",
+        query: { search: searchTerm },
+      });
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error:", error);
     }
   };
 
-  useEffect(() => {
-    if (search) {
-      fetchProducts(search);
-    } else {
-      fetchProducts("");
+  const fetchProductBySearchTerm = async () => {
+    try {
+      const response = await fetch(`/api/items?q=${searchTerm}`);
+      if (!response.ok) {
+        throw new Error("Error al obtener resultados de búsqueda");
+      }
+      const data: Product[] = await response.json();
+      setSearchResults(data);
+      router.push({
+        pathname: "/items",
+        query: { search: searchTerm },
+      });
+    } catch (error) {
+      console.error("Error:", error);
     }
-  }, [search]);
-
-  useEffect(() => {
-    const querySearch = router.query.search;
-
-    if (querySearch && typeof querySearch === "string") {
-      setSearch(querySearch);
-    }
-  }, [router.query.search]);
-
-  // Filtrar productos cuando cambia el término de búsqueda
-  useEffect(() => {
-    const lowercasedSearch = search.toLowerCase();
-    if (search.length > 0) {
-      const filtered = productsData.products.filter((product: Product) =>
-        product.title.toLowerCase().includes(lowercasedSearch)
-      );
-      setFilteredProducts(filtered);
-      console.log(filtered);
-      setResultCount(filtered.length);
-    } else {
-      setFilteredProducts(productsData.products); // Si no hay búsqueda, mostrar todos los productos
-      setResultCount(productsData.products.length);
-    }
-  }, [search]);
-
-  const handlerProductClick = (id: number) => {
-    router.push(`/item/${id}`);
   };
 
   return (
@@ -75,29 +85,35 @@ const ProductList = () => {
       {/* Caja de búsqueda */}
       <div className="mb-5 mt-5">
         <div className="flex">
-          <i className="fa-solid fa-bag-shopping text-blue-500 text-5xl mr-5"></i>
+          <i className="fa-solid fa-bag-shopping text-blue-500 text-5xl mr-5 mt-2"></i>
           <input
             type="text"
-            className="px-8 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500"
+            value={searchTerm}
+            className="px-5 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500"
             placeholder="Buscar productos..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)} // Actualizar búsqueda
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <button
+            onClick={fetchProductBySearchTerm}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none mb-5 ml-5 mt-5"
+          >
+            Buscar producto
+          </button>
+          <button
+            onClick={fetchAllItems}
+            className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none mb-5 ml-5 mt-5 px-3"
+          >
+            Ver todos
+          </button>
         </div>
       </div>
-
       {/* Título y cantidad de resultados */}
       <p className="font-bold text-center text-gray-700 mb-4">
-        {search
-          ? `Resultados de la búsqueda de "${search}" : ${resultCount}`
-          : `Resultados de la búsqueda: ${resultCount}`}
+        Resultados de la búsqueda de {search}: {searchResults.length}
       </p>
-
-      {/* Listado de productos filtrados */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-7 m-5">
-        {/* Verifica que filteredProducts sea un arreglo antes de mapear */}
-        {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
+      {searchResults.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-7 m-5">
+          {searchResults.map((product) => (
             <div
               key={product.id}
               className="p-4 border rounded-lg bg-gray-200 shadow-md relative"
@@ -105,9 +121,9 @@ const ProductList = () => {
               <img
                 src={product.thumbnail}
                 alt={product.title}
-                className="w-48 h-48 object-cover rounded-full  transform translate-x-1/4"
+                className="w-48 h-48 object-cover rounded-full  transform translate-x-2/4"
               />
-              <h2 className="text-xl font-semibold mt-2">{product.title}</h2>
+              <h2 className="text-xl font-semibold mt-4">{product.title}</h2>
               <p className="text-gray-600">{product.description}</p>
               <p className="text-lg font-bold">${product.price}</p>
               <p className="text-sm text-gray-500">
@@ -121,19 +137,19 @@ const ProductList = () => {
               </div>
               <button
                 type="button"
-                onClick={() => handlerProductClick(product.id)}
+                onClick={() => handleViewDetail(product.id)}
                 className="px-4 py-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 focus:outline-none absolute bottom-4 right-4"
               >
                 Ver detalle
               </button>
             </div>
-          ))
-        ) : (
-          <p>No se encontraron productos.</p>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <p>No se encontraron productos para {search}</p>
+      )}
     </div>
   );
 };
 
-export default ProductList;
+export default ResultsPage;
