@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 interface Sale {
@@ -12,6 +13,7 @@ interface Sale {
 const SalesPage = () => {
   const [sales, setSales] = useState<Sale[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchSales = async () => {
@@ -38,12 +40,25 @@ const SalesPage = () => {
     return <p>Cargando compras...</p>;
   }
 
+  const handleNavigate = () => {
+    router.push("/items");
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="max-w-6xl w-full p-6 bg-white rounded-lg shadow-md">
         <h2 className="text-3xl font-semibold text-center text-blue-700 mb-4">
           Historial de Compras
         </h2>
+
+        {/* Botón para navegar a /items */}
+        <button
+          onClick={handleNavigate}
+          className="mb-4 py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+        >
+          Volver a resultados de busqueda
+        </button>
+
         <table className="min-w-full table-auto">
           <thead>
             <tr>
